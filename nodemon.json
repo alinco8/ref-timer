@@ -1,0 +1,8 @@
+{
+    "exec": "tsx server/server.ts",
+    "ext": "*.ts",
+    "watch": ["server/**/*"],
+    "events": {
+        "start": "clear"
+    }
+}

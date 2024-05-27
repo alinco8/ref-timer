@@ -1,0 +1,9 @@
+@font-face {
+    font-family: 'SmartFontUI';
+    src: url(/03スマートフォントUI.otf) format('otf');
+}
+
+html,
+body {
+    height: 100%;
+}
