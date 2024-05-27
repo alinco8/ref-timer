@@ -61,7 +61,14 @@ export default function Index() {
     }, []);
 
     return (
-        <Flex width="full" align="center" justifyContent="center">
+        <Flex
+            width="full"
+            align="center"
+            justifyContent="center"
+            onSubmit={(e) => {
+                e.currentTarget.querySelector('button')!.disabled = true;
+            }}
+        >
             <Box p={2}>
                 <Box textAlign="center" p={2}>
                     <Text>
