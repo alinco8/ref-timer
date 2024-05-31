@@ -87,7 +87,7 @@ export default function Index() {
                                 </Heading>
                                 <Text>組待ち（約</Text>
                                 <Heading p={1} size="1xl">
-                                    {count * 5}
+                                    {count * 10}
                                 </Heading>
                                 <Text>分）</Text>
                             </Flex>
