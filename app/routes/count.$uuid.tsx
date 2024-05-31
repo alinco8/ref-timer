@@ -49,25 +49,6 @@ export default function Count() {
     const { revalidate } = useRevalidator();
     const socket = useSocketStore((store) => store.socket);
 
-    if (data === 404) {
-        return (
-            <Container>
-                <Card>
-                    <CardBody>
-                        <Alert status="error">
-                            <AlertIcon />
-                            <AlertTitle>404</AlertTitle>
-                            <AlertDescription>
-                                存在しない予約または予約がキャンセルされました
-                            </AlertDescription>
-                        </Alert>
-                    </CardBody>
-                </Card>
-            </Container>
-        );
-    }
-    const { number, count } = data;
-
     useEffect(() => {
         socket.on('update', revalidate);
         setUUID(location.pathname.split('/').at(-1) || '');
@@ -77,57 +58,43 @@ export default function Count() {
         };
     }, []);
 
-    return (
-        // <Container>
-        //     <Grid>
-        //         <GridItem display="flex" alignItems="center">
-        //             <>
-        //                 <Text>あなたの番号は：</Text>
-        //                 <Text>{number}番</Text>
-        //             </>
-        //         </GridItem>
-        //     </Grid>
-        //     <Grid>
-        //         <GridItem display="flex" alignItems="center">
-        //             <Text>残り：{count}組</Text>
-        //         </GridItem>
-        //     </Grid>
-        //     {count ? (
-        //         <Grid>
-        //             <GridItem display="flex" alignItems="center">
-        //                 <Text>待ち時間：残り約{count * 5}分</Text>
-        //             </GridItem>
-        //         </Grid>
-        //     ) : (
-        //         <Grid>
-        //             <GridItem>
-        //                 <Text>あなたの番です</Text>
-        //             </GridItem>
-        //         </Grid>
-        //     )}
-        // </Container>
+    return data === 404 ? (
+        <Container>
+            <Card>
+                <CardBody>
+                    <Alert status="error">
+                        <AlertIcon />
+                        <AlertTitle>404</AlertTitle>
+                        <AlertDescription>
+                            存在しない予約または予約がキャンセルされました
+                        </AlertDescription>
+                    </Alert>
+                </CardBody>
+            </Card>
+        </Container>
+    ) : (
         <Container>
             <Text size="xs" color="gray">
                 ID: {uuid}
             </Text>
             <Text size="xs" color="gray">
-                番号: {number}
+                番号: {data.number}
             </Text>
             <Card>
                 <CardBody>
                     <Flex direction="row" alignItems="center">
                         <Text>残り</Text>
-                        <Heading size="xl">{count}</Heading>
+                        <Heading size="xl">{data.count}</Heading>
                         <Text>組</Text>
                     </Flex>
                     <Flex direction="row" alignItems="center">
                         <Text>待ち時間 約</Text>
                         <Heading size="md" p={1}>
-                            {count * 5}
+                            {data.count * 5}
                         </Heading>
                         <Text>分</Text>
                     </Flex>
-                    {count === 0 && <Text>順番が来ました</Text>}
+                    {data.count === 0 && <Text>順番が来ました</Text>}
                 </CardBody>
             </Card>
         </Container>
