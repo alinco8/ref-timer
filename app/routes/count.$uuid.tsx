@@ -1,4 +1,8 @@
 import {
+    Alert,
+    AlertDescription,
+    AlertIcon,
+    AlertTitle,
     Card,
     CardBody,
     Container,
@@ -25,13 +29,11 @@ export const meta: MetaFunction = () => {
 export const loader = async ({ params }: LoaderFunctionArgs) => {
     const { uuid } = params;
 
-    if (!uuid)
-        throw new Response(null, {
-            status: 404,
-            statusText: 'Not Found',
-        });
+    if (!uuid) return 404;
 
     const self = await prisma.reservation.findFirst({ where: { uuid } });
+
+    if (!self) return 404;
 
     return {
         number: self?.number,
@@ -43,9 +45,28 @@ export const loader = async ({ params }: LoaderFunctionArgs) => {
 
 export default function Count() {
     const [uuid, setUUID] = useState('');
-    const { number, count } = useLoaderData<typeof loader>();
+    const data = useLoaderData<typeof loader>();
     const { revalidate } = useRevalidator();
     const socket = useSocketStore((store) => store.socket);
+
+    if (data === 404) {
+        return (
+            <Container>
+                <Card>
+                    <CardBody>
+                        <Alert status="error">
+                            <AlertIcon />
+                            <AlertTitle>404</AlertTitle>
+                            <AlertDescription>
+                                存在しない予約または予約がキャンセルされました
+                            </AlertDescription>
+                        </Alert>
+                    </CardBody>
+                </Card>
+            </Container>
+        );
+    }
+    const { number, count } = data;
 
     useEffect(() => {
         socket.on('update', revalidate);
