@@ -90,7 +90,7 @@ export default function Count() {
                     <Flex direction="row" alignItems="center">
                         <Text>待ち時間 約</Text>
                         <Heading size="md" p={1}>
-                            {data.count * 5}
+                            {data.count * 7}
                         </Heading>
                         <Text>分</Text>
                     </Flex>
