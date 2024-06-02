@@ -3,6 +3,7 @@ import {
     AlertDescription,
     AlertIcon,
     AlertTitle,
+    Box,
     Card,
     CardBody,
     Container,
@@ -36,7 +37,7 @@ export const loader = async ({ params }: LoaderFunctionArgs) => {
     if (!self) return 404;
 
     return {
-        number: self?.number,
+        self,
         count: await prisma.reservation.count({
             where: { number: { lt: self?.number } },
         }),
@@ -78,7 +79,7 @@ export default function Count() {
                 ID: {uuid}
             </Text>
             <Text size="xs" color="gray">
-                番号: {data.number}
+                番号: {data.self.number}
             </Text>
             <Card>
                 <CardBody>
@@ -90,11 +91,23 @@ export default function Count() {
                     <Flex direction="row" alignItems="center">
                         <Text>待ち時間 約</Text>
                         <Heading size="md" p={1}>
-                            {data.count * 7}
+                            {data.count * 10}
                         </Heading>
                         <Text>分</Text>
                     </Flex>
-                    {data.count === 0 && <Text>順番が来ました</Text>}
+                    <Box>
+                        {data.self.keep ? (
+                            <Alert status="warning">
+                                <AlertIcon />
+                                <AlertTitle flexShrink={0}>保留中</AlertTitle>
+                                <AlertDescription>
+                                    順番になってから時間が経過したので、他の人から接客しています
+                                </AlertDescription>
+                            </Alert>
+                        ) : (
+                            data.count === 0 && <Text>順番が来ました</Text>
+                        )}
+                    </Box>
                 </CardBody>
             </Card>
         </Container>

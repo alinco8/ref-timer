@@ -6,10 +6,11 @@ generator client {
 }
 
 model Reservation {
-  date   DateTime @unique
-  number Int      @id @unique @default(autoincrement())
+  date   DateTime
+  number Int       @id @unique @default(autoincrement())
   name   String
-  uuid   String   @default(uuid())
+  uuid   String    @unique @default(uuid())
+  keep   DateTime?
 }
 
 datasource db {
